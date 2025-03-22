@@ -1,0 +1,32 @@
+services:
+  postgres:
+    container_name: postgres 
+    image: postgres:alpine
+    hostname: localhost
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin
+    image: elestio/pgadmin:latest
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    volumes:
+      - pgadmin-data:/root/.pgadmin
+    ports:
+     - "5050:8080" 
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@localhost.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+      - PGADMIN_LISTEN_PORT=8080
+
+volumes:
+  postgres-data:
+  pgadmin-data:
